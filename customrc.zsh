@@ -19,9 +19,16 @@ alias Documents="~/Documents"
 alias webserver="python3 -m http.server"
 alias thcsb-login="az acr login -n thcsb"
 alias keycloak="docker start keycloak"
+alias du="dust"
+alias apt="apt-fast"
 
+# Custom env
+
+VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # Enable spell checker
 setopt correct
 # add a promt if incorrect
-export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? [y/n] "
+export SPROMPT="Correct $fg[red]%R$reset_color to $fg[green]%r$reset_color? [y/n] " 
+
+export PYTHONPATH="${PYTHONPATH}:/home/robin/.local/bin"

@@ -229,7 +229,7 @@ get_dir_size() {
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
   if [[ -n "$VIRTUAL_ENV" && -n "$VIRTUAL_ENV_DISABLE_PROMPT" ]]; then
-    prompt_segment blue black " ${VIRTUAL_ENV:t:gs/%/%%}"
+    prompt_segment blue black "(${VIRTUAL_ENV:t:gs/%/%%})"
   fi
 }
 
@@ -260,6 +260,45 @@ prompt_aws() {
   esac
 }
 
+prompt_get_programming_language() {
+  if [[ _check_npm ]]
+  then
+	node_version = $(_get_node_version)
+	package_version = $(_get_package_version)
+  	prompt_segment cyan black " ${node_version}  ${package_version}"
+
+  elif [[ _check_python -eq 1 ]]
+  then
+  	version = $(_get_python_version)
+  	prompt_segment cyan black " $version"
+	
+  fi
+}
+
+_check_npm() {
+  [[ -f "package.json" ]]
+}
+
+_get_package_version() {
+  grep 'version' package.json | cut -d ':' -f 2 | cut -d '"' -f 2
+}
+
+_get_node_version() {
+  node --version
+}
+
+_check_python() {}
+
+_get_python_version() {
+  python3 --version | cut -d ' ' -f 2
+}
+
+_check_dotnet() {}
+
+_check_java() {}
+
+_check_go() {}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
@@ -268,7 +307,8 @@ build_prompt() {
   prompt_aws
   prompt_context
   prompt_dir
-  #promt_folder_stats
+  # promt_folder_stats
+  prompt_get_programming_language
   prompt_git
   prompt_bzr
   prompt_hg
